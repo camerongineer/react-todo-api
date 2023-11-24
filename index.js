@@ -33,14 +33,23 @@ index.get("/items", (request, response) => {
     }).then(res => response.send(res.data["records"] ?? [])).catch(err => console.log(err));
 });
 
-index.post("/items", (request, response) => {
-    axios.post(fullUrl, request.body, {
+index.post("/item", (request, response) => {
+    const addItemUrl = `${AIRTABLE_URL}/${BASE_ID}/${AIRTABLE_TABLE_NAME}`;
+    
+    const data = {
+        "fields": {
+            "title": request.body.title
+        }
+    };
+    
+    axios.post(addItemUrl, data, {
         headers: {
             "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
             "Content-Type": "application/json"
         }
     }).then(res => response.send(res.data)).catch(err => console.log(err));
 });
+
 
 index.delete("/item/:id", (request, response) => {
     const id = request.params.id;
