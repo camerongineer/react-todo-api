@@ -25,13 +25,6 @@ index.get("/status", (request, response) => {
     response.send(status);
 });
 
-index.get("/status", (request, response) => {
-    const status = {
-        "Status": "Running"
-    };
-    response.send(status);
-});
-
 index.get("/items", (request, response) => {
     axios.get(fullUrl, {
         headers: {
@@ -42,6 +35,18 @@ index.get("/items", (request, response) => {
 
 index.post("/items", (request, response) => {
     axios.post(fullUrl, request.body, {
+        headers: {
+            "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
+            "Content-Type": "application/json"
+        }
+    }).then(res => response.send(res.data)).catch(err => console.log(err));
+});
+
+index.delete("/item/:id", (request, response) => {
+    const id = request.params.id;
+    const deleteUrl = `${AIRTABLE_URL}/${BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`;
+    
+    axios.delete(deleteUrl, {
         headers: {
             "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
             "Content-Type": "application/json"
