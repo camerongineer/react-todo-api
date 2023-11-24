@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
-const app = express();
+const index = express();
 require("dotenv").config();
 
 const AIRTABLE_URL = "https://api.airtable.com/v0";
@@ -12,20 +12,20 @@ const PORT = process.env.PORT || 3000;
 
 const fullUrl = `${AIRTABLE_URL}/${BASE_ID}/${AIRTABLE_TABLE_NAME}${SORT_BY_LAST_MODIFIED_TIME}`;
 
-app.use(express.json());
-app.use(cors());
-app.listen(PORT, () => {
+index.use(express.json());
+index.use(cors());
+index.listen(PORT, () => {
     console.log("Server Listening on PORT:", PORT);
 });
 
-app.get("/status", (request, response) => {
+index.get("/status", (request, response) => {
     const status = {
         "Status": "Running"
     };
     response.send(status);
 });
 
-app.get("/items", (request, response) => {
+index.get("/items", (request, response) => {
     axios.get(fullUrl, {
         headers: {
             "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
@@ -33,7 +33,7 @@ app.get("/items", (request, response) => {
     }).then(res => response.send(res.data["records"] ?? [])).catch(err => console.log(err));
 });
 
-app.post("/items", (request, response) => {
+index.post("/items", (request, response) => {
     axios.post(fullUrl, request.body, {
         headers: {
             "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
