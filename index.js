@@ -25,6 +25,13 @@ index.get("/status", (request, response) => {
     response.send(status);
 });
 
+index.get("/status", (request, response) => {
+    const status = {
+        "Status": "Running"
+    };
+    response.send(status);
+});
+
 index.get("/items", (request, response) => {
     axios.get(fullUrl, {
         headers: {
